@@ -1,0 +1,51 @@
+PARTE 1. CREAR EL AMBIENTE DE DESARROLLO VIRTUAL PARA EL PROYECTO
+Crear el directorio del proyecto:
+	mkdir proyecto_vehiculos_django
+	cd proyecto_vehiculos_django
+Crear el ambiente virtual con virtualenvwrapper:
+	mkvirtualenv proyecto_vehiculos_django
+Instalar las librerías requeridas:
+	pip install django==4.0.5 django-bootstrap-v5==1.0.11 django-crispy-forms==1.14.0 crispy-bootstrap5==0.6
+Crear el proyecto Django:
+	django-admin startproject proyecto_vehiculos_django .
+Crear la aplicación vehículo:
+	python manage.py startapp vehiculo
+
+Definir el modelo Vehiculo en vehiculo/models.py
+class Vehiculo(models.Model):
+    MARCA_CHOICES = [
+        ("Fiat", "Fiat"),
+        ("Chevrolet", "Chevrolet"),
+        ("Ford", "Ford"),
+        ("Toyota", "Toyota"),
+    ]
+    CATEGORIA_CHOICES = [
+        ("Particular", "Particular"),
+        ("Transporte", "Transporte"),
+        ("Carga", "Carga"),
+    ]
+    marca = models.CharField(max_length=20, choices=MARCA_CHOICES, default="Ford")
+    modelo = models.CharField(max_length=100)
+    serial_carroceria = models.CharField(max_length=50)
+    serial_motor = models.CharField(max_length=50)
+    categoria = models.CharField(
+        max_length=20, choices=CATEGORIA_CHOICES, default="Particular"
+    )
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
+
+Crear el superusuario:
+	python manage.py createsuperuser
+	Usar username: admin y password: admin
+
+Registrar la aplicación en el admin de Django (vehiculo/admin.py):
+	from django.contrib import admin
+	from .models import Vehiculo
+	admin.site.register(Vehiculo)
+	
+Agregar la aplicación 'vehiculo' a INSTALLED_APPS en settings.py.
+
+Realizar las migraciones:
+	python manage.py makemigrations
+	python manage.py migrate
